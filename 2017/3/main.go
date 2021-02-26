@@ -48,7 +48,61 @@ func problemOne(input float64) float64 {
 }
 
 func problemTwo(input float64) {
+	var arr [21][21]float64
+	midIndex := 10
 
+	arr[midIndex][midIndex] = 1
+
+	curXI := 10
+	curYI := 10
+
+	for i := 1; i < 6; i++ {
+
+		stepsOne := 1 + 2*(i-1)
+		stepsTwo := 2 * i
+
+		curXI++
+		arr[curYI][curXI] = getNextVal(arr, curXI, curYI)
+
+		for i := 0; i < stepsOne; i++ {
+			curYI--
+			arr[curYI][curXI] = getNextVal(arr, curXI, curYI)
+		}
+
+		for i := 0; i < stepsTwo; i++ {
+			curXI--
+			arr[curYI][curXI] = getNextVal(arr, curXI, curYI)
+		}
+
+		for i := 0; i < stepsTwo; i++ {
+			curYI++
+			arr[curYI][curXI] = getNextVal(arr, curXI, curYI)
+		}
+
+		for i := 0; i < stepsTwo; i++ {
+			curXI++
+			arr[curYI][curXI] = getNextVal(arr, curXI, curYI)
+		}
+	}
+
+	for _, line := range arr {
+		fmt.Println(line)
+	}
+
+	fmt.Println(getNextVal(arr, 10, 10))
+}
+
+func getNextVal(arr [21][21]float64, curXI int, curYI int) float64 {
+	var sum float64 = 0
+	for x := -1; x <= 1; x++ {
+		for y := -1; y <= 1; y++ {
+			sum += arr[curYI+y][curXI+x]
+		}
+	}
+	if sum > 312051 {
+		fmt.Println(sum)
+	}
+	return sum
 }
 
 func main() {
