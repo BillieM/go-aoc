@@ -140,10 +140,6 @@ func getNextPos(curPos int, length int, skipSize int, listLen int) int {
 }
 
 func nextListCycle(list *[256]int, curPos int, length int, listLen int) {
-	/*
-		check if arr to reverse needs to wrap round
-	*/
-
 	var revArr []int
 
 	if curPos+length >= listLen {
@@ -190,10 +186,8 @@ func reverseArr(arr *[]int) {
 }
 
 func main() {
-	// input1 := getInput1()
-	// fmt.Println(problemOne([]int{3, 4, 1, 5}))
-	// fmt.Println(problemOne(input1))
+	input1 := getInput1()
+	fmt.Println(problemOne(input1))
 	input2 := getInput2()
 	fmt.Println(problemTwo(input2))
-
 }
