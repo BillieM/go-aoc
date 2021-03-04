@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func getInput() []int {
+func getInput1() []int {
 
 	var inputArr []int
 
@@ -35,6 +35,34 @@ func getInput() []int {
 	return inputArr
 }
 
+func getInput2() []int {
+	var inputArr []int
+
+	file, err := os.Open("input.txt")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		for _, char := range scanner.Text() {
+			inputArr = append(inputArr, int(char))
+		}
+	}
+
+	toAdd := []int{17, 31, 73, 47, 23}
+
+	for _, num := range toAdd {
+		inputArr = append(inputArr, num)
+	}
+
+	return inputArr
+}
+
 func problemOne(input []int) int {
 
 	var list [256]int
@@ -56,6 +84,55 @@ func problemOne(input []int) int {
 	}
 
 	return list[0] * list[1]
+}
+
+func problemTwo(lengths []int) string {
+
+	var list [256]int
+
+	listLen := len(list)
+
+	curPos := 0
+	skipSize := 0
+
+	for i := 0; i < listLen; i++ {
+		list[i] = i
+	}
+
+	for i := 0; i < 64; i++ {
+
+		for _, length := range lengths {
+
+			nextListCycle(&list, curPos, length, listLen)
+
+			curPos = getNextPos(curPos, length, skipSize, listLen)
+
+			skipSize++
+
+		}
+	}
+
+	var denseHashNums [16]int
+
+	for i := 0; i < 16; i++ {
+		slice := list[i*16 : (i+1)*16]
+		denseHash := slice[0]
+		for i := 1; i < 16; i++ {
+			denseHash = denseHash ^ slice[i]
+
+		}
+		denseHashNums[i] = denseHash
+	}
+
+	hexString := ""
+
+	for _, denseHash := range denseHashNums {
+		hexString += fmt.Sprintf("%02x", denseHash)
+	}
+
+	hexString = strings.ToLower(hexString)
+
+	return hexString
 }
 
 func getNextPos(curPos int, length int, skipSize int, listLen int) int {
@@ -113,8 +190,10 @@ func reverseArr(arr *[]int) {
 }
 
 func main() {
-	input := getInput()
+	// input1 := getInput1()
 	// fmt.Println(problemOne([]int{3, 4, 1, 5}))
-	fmt.Println(problemOne(input))
+	// fmt.Println(problemOne(input1))
+	input2 := getInput2()
+	fmt.Println(problemTwo(input2))
 
 }
